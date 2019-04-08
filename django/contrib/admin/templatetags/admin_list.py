@@ -290,7 +290,11 @@ def items_for_result(cl, result, form):
                     form[cl.model._meta.pk.name].is_hidden)):
                 bf = form[field_name]
                 result_repr = mark_safe(str(bf.errors) + str(bf))
-            yield format_html('<td{}>{}</td>', row_class, result_repr)
+            try:
+                color = result_repr.split("data-color=\"")[1].split("\"")[0]
+                yield format_html('<td{} bgcolor="{}">{}</td>', row_class, color, result_repr)
+            except Exception:
+                yield format_html('<td{}>{}</td>', row_class, result_repr)
     if form and not form[cl.model._meta.pk.name].is_hidden:
         yield format_html('<td>{}</td>', form[cl.model._meta.pk.name])
 
